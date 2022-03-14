@@ -17,20 +17,21 @@
         tools:context=".MainActivity">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:gravity="center_vertical"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="Line Chart!"
+            android:layout_marginEnd="20dp"
+            android:gravity="center_vertical"
+            android:text="@{activity.priceLiveData}"
             android:textColor="@color/black"
             android:textSize="15dp" />
 
         <com.github.mikephil.charting.charts.LineChart
-            android:layout_marginTop="60dp"
             android:id="@+id/line_chart"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="300dp"
+            android:layout_marginTop="60dp" />
 
     </FrameLayout>
 
