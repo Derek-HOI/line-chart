@@ -549,6 +549,26 @@ public class LineChartRenderer extends LineRadarRenderer {
                 // apply the text-styling defined by the DataSet
                 applyValueTextStyle(dataSet);
 
+                int minIdx = -1, maxIdx = -1;
+                float minValue = 0.0F, maxValue = 0.0F;
+                for (int idx = 0; idx < dataSet.getEntryCount(); idx++) {
+                    Entry e = dataSet.getEntryForIndex(idx);
+                    if (idx == 0) {
+                        minValue = e.getY();
+                        maxValue = e.getY();
+                        minIdx = idx;
+                        maxIdx = idx;
+                    } else {
+                        if (e.getY() < minValue) {
+                            minValue = e.getY();
+                            minIdx = idx;
+                        } else if (e.getY() > maxValue) {
+                            maxValue = e.getY();
+                            maxIdx = idx;
+                        }
+                    }
+                }
+
                 Transformer trans = mChart.getTransformer(dataSet.getAxisDependency());
 
                 // make sure the values do not interfear with the circles
@@ -577,11 +597,14 @@ public class LineChartRenderer extends LineRadarRenderer {
                     if (!mViewPortHandler.isInBoundsLeft(x) || !mViewPortHandler.isInBoundsY(y))
                         continue;
 
-                    Entry entry = dataSet.getEntryForIndex(j / 2 + mXBounds.min);
+                    int entryIdx = j / 2 + mXBounds.min;
+                    Entry entry = dataSet.getEntryForIndex(entryIdx);
 
                     if (dataSet.isDrawValuesEnabled()) {
-                        drawValue(c, dataSet.getValueFormatter(), entry.getY(), entry, i, x,
-                                y - valOffset, dataSet.getValueTextColor(j / 2));
+                        if (entryIdx == minIdx || entryIdx == maxIdx) {
+                            drawValue(c, dataSet.getValueFormatter(), entry.getY(), entry, i, x,
+                                    y - valOffset, dataSet.getValueTextColor(j / 2));
+                        }
                     }
 
                     if (entry.getIcon() != null && dataSet.isDrawIconsEnabled()) {
